@@ -6,8 +6,6 @@ import re # preprocessing
 from nltk.corpus import stopwords # preprocessing
 import nltk # preprocessing
 
-import gensim.downloader as gensimAPI ## for word embedding
-
 #for model-building
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
@@ -55,29 +53,19 @@ dictionary = []
 with open('data.json', mode = 'r', errors = 'ignore') as json_file:
     for dic in json_file:
         dictionary.append( json.loads(dic) )
-## print the first one
-# print(dictionary[0])
-# print()
 
-## create dtf
+
+# create dtf
 dataSet = pd.DataFrame(dictionary)
-## filter categories
+# filter categories
 dataSet = dataSet[dataSet["category"].isin(['SCIENCE','WORLD NEWS','TECH'])][["category","headline"]]
 # dataSet = dataSet[ dataSet["category"].isin(['SPORTS','POLITICS','TECH']) ][["category","headline"]]
 
-# print 5 random rows
-# print(dataSet.sample(5))
 
 dataSet["headline_clean"] = dataSet["headline"].apply(lambda x: process_text(x))
-# print(dataSet.head())
 
 # split dataset
 x_train, x_test, y_train, y_test = train_test_split(dataSet["headline_clean"],dataSet["category"],test_size=0.2,shuffle=True)
-
-# # label encode the target variable
-# encoder = preprocessing.LabelEncoder()
-# y_train = encoder.fit_transform(y_train)
-# y_test = encoder.fit_transform(y_test)
 
 
 # Word embedding
